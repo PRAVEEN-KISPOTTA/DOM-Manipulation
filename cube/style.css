@@ -1,0 +1,57 @@
+body{
+  background-color: #c52329;
+}
+.main-container{
+  height: 91.9vh;
+  width: 100vw;
+  border: 2px solid blue;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 99vw;
+  padding:20px 0;
+  align-content: flex-start;
+  overflow-y: auto;
+  justify-content: center;
+}
+
+.mainDiv{
+    position: relative;
+    width: 206px;
+    height: 190px;
+    /* margin: 0px auto; */
+    margin-top:30px;
+  }
+  .square{
+    width:100px;
+    height:100px;
+    background:#c52329;
+    border:solid 2px #FFF;
+    float:left;
+    transform: skew(180deg,210deg);
+    position: absolute;
+    top: 43px;
+  }
+  .square2{
+    width:100px;
+    height:100px;
+    background:#c52329;
+    border:solid 2px #FFF;
+    float:left;
+    transform: skew(180deg,150deg);
+    position: absolute;
+    left:102px;
+    top: 43px;
+  }
+  .square3{
+    width:114px;
+    height:100px;
+    background:#c52329;
+    border:solid 2px #FFF;
+    float:left;
+   
+  
+  transform: rotate(150deg) translate(-40px, -16px) skew(30deg, 0deg);
+    position: absolute;
+    left: 0px;
+    top: -32px;
+  }
