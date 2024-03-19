@@ -48,3 +48,13 @@ function addBlog(blog){
 blogData.forEach(data=>{
     addBlog(data);
 })
+
+//----------------------------------------------------------------------------------------
+
+const blogList = document.querySelector("ul")
+
+blogList.addEventListener("click", clicked);
+
+function clicked(){
+    console.log("clicked");
+}
