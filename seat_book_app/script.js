@@ -31,18 +31,34 @@ dropDownList.addEventListener("change", ()=>{
 });
 //Add eventLister to each unoccupied seat
 const seatCont = document.querySelectorAll("#seatCont .seat");
-const unOccupied = Array.from(seatCont).filter(seat=> !seat.classList.contains("occupied"));
-console.log(unOccupied)
+const seatSelected = document.querySelector("#selectedSeatsHolder");
+const removeSpan = document.querySelector(".noSelected");
+// const unOccupied = Array.from(seatCont).filter(seat=> !seat.classList.contains("occupied"));
+// console.log(unOccupied)
 
-unOccupied.forEach(seats=>{
+seatCont.forEach((seats, index)=>{
+
+    // select or deselect seats from display
     seats.addEventListener("click", ()=>{
-        if(!seats.classList.contains("selected")){
-            seats.classList.add("selected")
+        const seatSelectedBox = document.createElement("div");
+        if(!seats.classList.contains("selected") && !seats.classList.contains("occupied")){
+            seats.classList.add("selected");
+            removeSpan.remove();
+
+            seatSelectedBox.className = "selectedSeat";
+            seatSelectedBox.textContent = index+1;
+
+            seatSelected.appendChild(seatSelectedBox);
+            console.log("index-", index+1)
+
         }
         else{
+            //this is for remove seats from display
             seats.classList.remove("selected");
         }
     })
 })
+
+
 //Add eventLsiter to continue Button
 //Add eventListerner to Cancel Button
