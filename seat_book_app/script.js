@@ -8,6 +8,8 @@ const moviesList = [
 const dropDownList = document.querySelector("#selectMovie");
 const movieNameUpdate = document.querySelector("#movieName");
 const moviePriceUpdate = document.querySelector("#moviePrice");
+let storeUpdateName = "";
+let storeUpdatePrice = 7;
 
 moviesList.forEach(movie=>{
     const option = document.createElement("option");
@@ -23,16 +25,22 @@ dropDownList.addEventListener("change", ()=>{
     const selectedMovie = moviesList.find((movie)=>movie.movieName === selectMovieName);
 
     if(selectedMovie){
+        storeUpdateName = selectedMovie.movieName;
+        storeUpdatePrice = parseInt(selectedMovie.price);
         movieNameUpdate.textContent = selectedMovie.movieName;
         moviePriceUpdate.textContent = "$ " + selectedMovie.price;
     }
-
-    console.log(selectedMovie);
 });
 //Add eventLister to each unoccupied seat
 const seatCont = document.querySelectorAll("#seatCont .seat");
 const seatSelected = document.querySelector("#selectedSeatsHolder");
 const removeSpan = document.querySelector(".noSelected");
+const incSeat = document.querySelector("#numberOfSeat");
+let convertIncSeat = parseInt(incSeat.textContent);
+const totalPrice = document.querySelector("#totalPrice");
+
+console.log(storeUpdatePrice);
+
 // const unOccupied = Array.from(seatCont).filter(seat=> !seat.classList.contains("occupied"));
 // console.log(unOccupied)
 
@@ -43,6 +51,21 @@ seatCont.forEach((seats, index)=>{
         const seatSelectedBox = document.createElement("div");
         if(!seats.classList.contains("selected") && !seats.classList.contains("occupied")){
             seats.classList.add("selected");
+            
+            //increament number of seat in display
+            convertIncSeat += 1;
+            console.log("convert", convertIncSeat)
+            incSeat.textContent = convertIncSeat;
+
+            //adding price of all selected seats
+            const getTextOfPrice = totalPrice.textContent;
+            const numericStr = getTextOfPrice.replace(/[^\d.-]/g, ''); // Remove non-numeric characters (including spaces and currency symbols)
+            let convertPrice = parseInt(numericStr);
+            convertPrice += storeUpdatePrice;
+            totalPrice.textContent = "$ " + convertPrice;
+            console.log(typeof(numericStr))
+
+            //remove No Seat Selected 'sapn' tag
             removeSpan.remove();
 
             seatSelectedBox.className = "selectedSeat";
@@ -61,4 +84,25 @@ seatCont.forEach((seats, index)=>{
 
 
 //Add eventLsiter to continue Button
+const selectedSeat = document.querySelectorAll("#selectedSeatsHolder .selectedSeat")
+const proceedBtn = document.querySelector("#proceedBtn");
+proceedBtn.addEventListener("click", ()=>{
+    if(convertIncSeat == 0){
+        alert("Oops no seat Selected");
+    }
+    else{
+
+    }
+    seatCont.forEach((seat)=>{
+        console.log(seat.classList.contains("selected"))
+        if(seat.classList.contains("selected")){
+            seat.classList.remove("selected")
+            seat.classList.add("occupied");
+        }
+        console.log(selectedSeat)
+        seatSelected.appendChild(removeSpan);
+        
+        
+    })
+})
 //Add eventListerner to Cancel Button
