@@ -101,8 +101,6 @@ proceedBtn.addEventListener("click", ()=>{
         }
         console.log(selectedSeat)
         seatSelected.appendChild(removeSpan);
-        
-        
     })
 })
 
