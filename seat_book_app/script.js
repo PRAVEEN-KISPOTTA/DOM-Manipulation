@@ -91,17 +91,23 @@ proceedBtn.addEventListener("click", ()=>{
         alert("Oops no seat Selected");
     }
     else{
+        alert("Yayy! Your Seats have been booked");
+        seatCont.forEach((seat)=>{
+            console.log(seat.classList.contains("selected"))
+            if(seat.classList.contains("selected")){
+                seat.classList.remove("selected")
+                seat.classList.add("occupied");
+                document.querySelector(".selectedSeat").remove() //remove selected seats from cart
+                seatSelected.appendChild(removeSpan);
+                totalPrice.textContent = "$ " + 0; // remove total calculated price
+                incSeat.textContent = 0; //remove total calculated seats
+                
+            }
+            // console.log(selectedSeat)
 
+        })
     }
-    seatCont.forEach((seat)=>{
-        console.log(seat.classList.contains("selected"))
-        if(seat.classList.contains("selected")){
-            seat.classList.remove("selected")
-            seat.classList.add("occupied");
-        }
-        console.log(selectedSeat)
-        seatSelected.appendChild(removeSpan);
-    })
+
 })
 
 //Add eventListerner to Cancel Button
