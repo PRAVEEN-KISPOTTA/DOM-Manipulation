@@ -1,113 +1,113 @@
-//Create you project here from scratch
+// Movies data
 const moviesList = [
     { movieName: "Flash", price: 7 },
     { movieName: "Spiderman", price: 5 },
     { movieName: "Batman", price: 4 },
-  ];
-// Use moviesList array for displaing the Name in the dropdown menu
+];
+
+// DOM elements
 const dropDownList = document.querySelector("#selectMovie");
 const movieNameUpdate = document.querySelector("#movieName");
 const moviePriceUpdate = document.querySelector("#moviePrice");
-let storeUpdateName = "";
-let storeUpdatePrice = 7;
-
-moviesList.forEach(movie=>{
-    const option = document.createElement("option");
-    option.innerHTML = movie.movieName + " $"+ movie.price
-    option.value = movie.movieName;
-    dropDownList.appendChild(option);
-});
-
-console.log(dropDownList[2].value)
-dropDownList.addEventListener("change", ()=>{
-    const selectMovieName = dropDownList.value;
-    console.log(selectMovieName);
-    const selectedMovie = moviesList.find((movie)=>movie.movieName === selectMovieName);
-
-    if(selectedMovie){
-        storeUpdateName = selectedMovie.movieName;
-        storeUpdatePrice = parseInt(selectedMovie.price);
-        movieNameUpdate.textContent = selectedMovie.movieName;
-        moviePriceUpdate.textContent = "$ " + selectedMovie.price;
-    }
-});
-//Add eventLister to each unoccupied seat
 const seatCont = document.querySelectorAll("#seatCont .seat");
 const seatSelected = document.querySelector("#selectedSeatsHolder");
 const removeSpan = document.querySelector(".noSelected");
 const incSeat = document.querySelector("#numberOfSeat");
-let convertIncSeat = parseInt(incSeat.textContent);
 const totalPrice = document.querySelector("#totalPrice");
-
-console.log(storeUpdatePrice);
-
-// const unOccupied = Array.from(seatCont).filter(seat=> !seat.classList.contains("occupied"));
-// console.log(unOccupied)
-
-seatCont.forEach((seats, index)=>{
-
-    // select or deselect seats from display
-    seats.addEventListener("click", ()=>{
-        const seatSelectedBox = document.createElement("div");
-        if(!seats.classList.contains("selected") && !seats.classList.contains("occupied")){
-            seats.classList.add("selected");
-            
-            //increament number of seat in display
-            convertIncSeat += 1;
-            console.log("convert", convertIncSeat)
-            incSeat.textContent = convertIncSeat;
-
-            //adding price of all selected seats
-            const getTextOfPrice = totalPrice.textContent;
-            const numericStr = getTextOfPrice.replace(/[^\d.-]/g, ''); // Remove non-numeric characters (including spaces and currency symbols)
-            let convertPrice = parseInt(numericStr);
-            convertPrice += storeUpdatePrice;
-            totalPrice.textContent = "$ " + convertPrice;
-            console.log(typeof(numericStr))
-
-            //remove No Seat Selected 'sapn' tag
-            removeSpan.remove();
-
-            seatSelectedBox.className = "selectedSeat";
-            seatSelectedBox.textContent = index+1;
-
-            seatSelected.appendChild(seatSelectedBox);
-            console.log("index-", index+1)
-
-        }
-        else{
-            //this is for remove seats from display
-            seats.classList.remove("selected");
-        }
-    })
-})
-
-
-//Add eventLsiter to continue Button
-const selectedSeat = document.querySelectorAll("#selectedSeatsHolder .selectedSeat")
 const proceedBtn = document.querySelector("#proceedBtn");
-proceedBtn.addEventListener("click", ()=>{
-    if(convertIncSeat == 0){
-        alert("Oops no seat Selected");
+const cancelBtn = document.querySelector("#cancelBtn");
+
+// Selected seat count and total price
+let convertIncSeat = 0;
+let totalPriceValue = 0;
+
+// Function to update movie details
+function updateMovieDetails(selectedMovie) {
+    movieNameUpdate.textContent = selectedMovie.movieName;
+    moviePriceUpdate.textContent = "$ " + selectedMovie.price;
+}
+
+// Function to update total price
+function updateTotalPrice(price) {
+    totalPriceValue += price;
+    totalPrice.textContent = "$ " + totalPriceValue;
+}
+
+// Function to update selected seat count
+function updateSelectedSeatCount(increment) {
+    convertIncSeat += increment;
+    incSeat.textContent = convertIncSeat;
+}
+
+// Populate dropdown menu with movie names
+moviesList.forEach(movie => {
+    const option = document.createElement("option");
+    option.textContent = movie.movieName + " $" + movie.price;
+    option.value = movie.movieName;
+    dropDownList.appendChild(option);
+});
+
+// Event listener for dropdown menu change
+dropDownList.addEventListener("change", () => {
+    const selectedMovieName = dropDownList.value;
+    const selectedMovie = moviesList.find(movie => movie.movieName === selectedMovieName);
+    if (selectedMovie) {
+        updateMovieDetails(selectedMovie);
     }
-    else{
-        alert("Yayy! Your Seats have been booked");
-        seatCont.forEach((seat)=>{
-            console.log(seat.classList.contains("selected"))
-            if(seat.classList.contains("selected")){
-                seat.classList.remove("selected")
+});
+
+// Event listener for seat selection
+seatCont.forEach((seat, index) => {
+    seat.addEventListener("click", () => {
+        if (!seat.classList.contains("selected") && !seat.classList.contains("occupied")) {
+            seat.classList.add("selected");
+            updateSelectedSeatCount(1);
+            const selectedMoviePrice = parseInt(moviePriceUpdate.textContent.replace(/[^\d.-]/g, ''));
+            updateTotalPrice(selectedMoviePrice);
+            removeSpan.remove();
+            const selectedSeatBox = document.createElement("div");
+            selectedSeatBox.className = "selectedSeat";
+            selectedSeatBox.textContent = index + 1;
+            seatSelected.appendChild(selectedSeatBox);
+        } else {
+            seat.classList.remove("selected");
+            updateSelectedSeatCount(-1);
+        }
+    });
+});
+
+// Event listener for proceed button
+proceedBtn.addEventListener("click", () => {
+    if (convertIncSeat === 0) {
+        alert("Oops, no seats selected!");
+    } else {
+        alert("Yay! Your seats have been booked.");
+        seatCont.forEach(seat => {
+            if (seat.classList.contains("selected")) {
+                seat.classList.remove("selected");
                 seat.classList.add("occupied");
-                document.querySelector(".selectedSeat").remove() //remove selected seats from cart
-                seatSelected.appendChild(removeSpan);
-                totalPrice.textContent = "$ " + 0; // remove total calculated price
-                incSeat.textContent = 0; //remove total calculated seats
-                
+                document.querySelector(".selectedSeat").remove();
             }
-            // console.log(selectedSeat)
-
-        })
+        });
+        totalPriceValue = 0;
+        convertIncSeat = 0;
+        totalPrice.textContent = "$ " + totalPriceValue;
+        incSeat.textContent = convertIncSeat;
+        seatSelected.appendChild(removeSpan);
     }
+});
 
-})
-
-//Add eventListerner to Cancel Button
+// Event listener for cancel button
+cancelBtn.addEventListener("click", () => {
+    seatCont.forEach(seat => {
+        if (seat.classList.contains("selected")) {
+            seat.classList.remove("selected");
+            document.querySelector(".selectedSeat").remove();
+        }
+    });
+    totalPriceValue = 0;
+    convertIncSeat = 0;
+    totalPrice.textContent = "$ " + totalPriceValue;
+    incSeat.textContent = convertIncSeat;
+    seatSelected.appendChild(removeSpan);
+});
